@@ -98,7 +98,6 @@ class HomeFragment : Fragment() {
                     } else {
                         Log.d("Frame", "Bitmap bernilai null")
                     }
-//                    bitmap?.let { processFrame(it) }
                 } else {
                     Log.d("Frame", "TextureView tidak tersedia atau tidak compatible")
                 }
@@ -191,10 +190,10 @@ class HomeFragment : Fragment() {
         Log.d("Deteksi", "Output baru: ${output.contentDeepToString()}")
 
         for (i in 0 until numDetections) {
-            val x = output[i][0]
-            val y = output[i][1]
-            val w = output[i][2]
-            val h = output[i][3]
+            val xCenter = output[i][0] * 416f
+            val yCenter = output[i][1] * 416f
+            val boxWidth = output[i][2] * 416f
+            val boxHeight = output[i][3] * 416f
             val confidence = output[i][4]
             val classId = output[i][5].toInt()
 
@@ -203,10 +202,10 @@ class HomeFragment : Fragment() {
                 Log.d("Deteksi", "Deteksi ditemukan class=$classId confidence=$confidence")
 
                 val rect = RectF(
-                    x - w / 2, // left
-                    y - h / 2, // top
-                    x + w / 2, // right
-                    y + h / 2  // bottom
+                    xCenter - boxWidth / 2f,
+                    yCenter - boxHeight / 2f,
+                    xCenter + boxWidth / 2f,
+                    yCenter + boxHeight / 2f
                 )
                 val label = when (classId) {
                     0 -> "With Chin Strap"

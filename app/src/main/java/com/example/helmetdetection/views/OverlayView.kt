@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 
 class OverlayView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
@@ -11,12 +12,14 @@ class OverlayView(context: Context, attrs: AttributeSet?) : View(context, attrs)
 
     fun setDetections(detections: List<DetectionResult>) {
         this.detections = detections
+        Log.d("Overlay", "Detections diterima: ${detections.size}")
         invalidate()
     }
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        Log.d("Overlay", "onDraw terpanggil. Jumlah deteksi: ${detections.size}")
 
         val paintBox = Paint().apply {
             color = Color.RED
