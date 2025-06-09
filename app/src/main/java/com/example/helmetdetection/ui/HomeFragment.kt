@@ -157,7 +157,7 @@ class HomeFragment : Fragment() {
 
     @SuppressLint("UseKtx")
     private fun processFrame(bitmap: Bitmap) {
-        val resized = Bitmap.createScaledBitmap(bitmap, 416, 416, false)
+        val resized = letterboxBitmap(bitmap, 416, 416)
         val input = ImageUtils.bitmapToInputArray(resized)
         val output = tfliteHelper.runInference(input)[0] // [300][6]
 
@@ -246,7 +246,7 @@ class HomeFragment : Fragment() {
             strapDetected -> 1
             noStrapDetected -> 0
             noHelmDetected -> 0 // tidak ada helm, otomatis tidak ada strap
-            else -> 1 // default aman
+            else -> 1
         }
 
         if (!hasDetection) {
@@ -266,5 +266,31 @@ class HomeFragment : Fragment() {
             boxes.add(output[i])
         }
         return boxes
+    }
+
+    fun letterboxBitmap(input: Bitmap, targetWidth: Int, targetHeight: Int): Bitmap {
+        val originalWidth = input.width
+        val originalHeight = input.height
+
+        val scale = minOf(
+            targetWidth.toFloat() / originalWidth,
+            targetHeight.toFloat() / originalHeight
+        )
+
+        val resizedWidth = (originalWidth * scale).toInt()
+        val resizedHeight = (originalHeight * scale).toInt()
+
+        val resizedBitmap = Bitmap.createScaledBitmap(input, resizedWidth, resizedHeight, true)
+
+        val outputBitmap = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888)
+        val canvas = android.graphics.Canvas(outputBitmap)
+        canvas.drawColor(android.graphics.Color.BLACK)
+
+        val dx = (targetWidth - resizedWidth) / 2f
+        val dy = (targetHeight - resizedHeight) / 2f
+
+        canvas.drawBitmap(resizedBitmap, dx, dy, null)
+
+        return outputBitmap
     }
 }
