@@ -23,7 +23,6 @@ object DetectionUtils {
         return matchCount >= minMatches
     }
 
-
     private fun distance(box1: FloatArray, box2: FloatArray): Float {
         val dx = box1[0] - box2[0]
         val dy = box1[1] - box2[1]

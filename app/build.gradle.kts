@@ -66,5 +66,7 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.media3.exoplayer.rtsp)
+
+    implementation("org.java-websocket:Java-WebSocket:1.5.3")
 }
 

@@ -17,14 +17,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.helmetdetection.R
 import com.example.helmetdetection.adapters.NotificationAdapter
 import com.example.helmetdetection.network.RetrofitClient
-import com.example.helmetdetection.network.LogResponse
+import com.example.helmetdetection.models.LogResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class NotificationFragment : Fragment() {
     private lateinit var rvNotification: RecyclerView
-    private var lastLogId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,5 +105,4 @@ class NotificationFragment : Fragment() {
         val prefs = requireContext().getSharedPreferences("helmet_prefs", Context.MODE_PRIVATE)
         prefs.edit().putInt("last_log_id", id).apply()
     }
-
 }

@@ -30,7 +30,7 @@ import com.example.helmetdetection.R
 import com.example.helmetdetection.utils.TFLiteHelper
 import com.example.helmetdetection.adapters.LogAdapter
 import com.example.helmetdetection.models.LogPostRequest
-import com.example.helmetdetection.network.LogResponse
+import com.example.helmetdetection.models.LogResponse
 import com.example.helmetdetection.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -236,6 +236,7 @@ class HomeFragment : Fragment() {
 
         Log.d("Status", "No Helm=$noHelmDetected , With Helm=$helmDetected")
         Log.d("Status", "No Strap=$noStrapDetected , With Strap=$strapDetected")
+
         val statusHelm = when {
             strapDetected -> 1 // jika strap terdeteksi, berarti helm juga
             helmDetected -> 1
@@ -250,6 +251,7 @@ class HomeFragment : Fragment() {
         }
 
         if (!hasDetection) {
+            lastBoxes = null
             Log.d("Deteksi", "Tidak ada objek valid, tidak dikirim ke server")
             return
         }
@@ -260,13 +262,7 @@ class HomeFragment : Fragment() {
         sendLog(waktuSekarang, statusHelm, statusStrap)
     }
 
-    fun convertOutputToBoxes(output: Array<FloatArray>): List<FloatArray> {
-        val boxes = mutableListOf<FloatArray>()
-        for (i in output.indices) {
-            boxes.add(output[i])
-        }
-        return boxes
-    }
+    fun convertOutputToBoxes(output: Array<FloatArray>) = output.toList()
 
     fun letterboxBitmap(input: Bitmap, targetWidth: Int, targetHeight: Int): Bitmap {
         val originalWidth = input.width
